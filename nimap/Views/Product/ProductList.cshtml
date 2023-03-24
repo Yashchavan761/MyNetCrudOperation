@@ -1,0 +1,70 @@
+﻿@model  List<nimap.Context.Product>
+
+@{ 
+    ViewData["Title"] = "ProductList";
+
+    nimap.Context.Pager pager = new nimap.Context.Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager !=null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+
+}
+
+<table class="table table-hover">
+    <tr>
+        <th> Producd Id </th>.
+        <th> Product Name </th>
+        <th> Category Id </th>
+        <th> Category Name </th>
+    </tr>
+
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.ProductId</td>
+            <td>@item.ProductName</td>
+            <td>@item.CategoryId</td>
+            <td>@item.CategoryName</td>
+            <td>
+                <a href="@Url.Action("Product", new { item.ProductId,item.ProductName,item.CategoryId,item.CategoryName })"class="btn btn-success">Edit</a>
+                <a href="@Url.Action("Delete", new {item.ProductId})" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+<div class="container">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item@(pge==pager.CurrentPage? "active":"")">
+                    <a class="page-link" asp-controller="Product" asp-action="ProductList" asp-route-pg="@pge">@pge</a>
+                </li>
+            }
+        
+
+
+    @if (pager.CurrentPage < pager.TotalPages)
+        {
+                    <li class="page-item">
+                        <a  class="page-link" asp-controller="Product" asp-action="ProductList" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+
+                    </li>
+                    <li>
+                        <a class="page-link" asp-controller="Product" asp-action="ProductList" asp-route-pg="@(pager.TotalPages)">Last</a>
+                    </li>
+
+                }
+            </ul>
+
+
+
+        }
+
+    </div>
